@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'net.svenwollinger'
+version '0.1b'
+
+application {
+    mainClassName = "net.svenwollinger.Main"
+    executableDir = "C:\\"
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'net.svenwollinger.Main'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
