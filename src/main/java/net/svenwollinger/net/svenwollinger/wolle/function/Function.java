@@ -13,13 +13,31 @@ public class Function {
 
     private ArrayList<IInstruction> instructions = new ArrayList<>();
 
-    public Function() {
+    private Runtime runtime;
+    private Function parent;
+
+    public Function(Runtime runtime) {
+        this.runtime = runtime;
+        this.parent = null;
+    }
+
+    public Function(Runtime runtime, Function parent) {
+        this.runtime = runtime;
+        this.parent = parent;
     }
 
     public void execute() {
         for(IInstruction instruction : instructions) {
             instruction.execute(this);
         }
+    }
+
+    public Runtime getRuntime() {
+        return runtime;
+    }
+
+    public Function getParent() {
+        return parent;
     }
 
     public IVariable getVariable(String identifier) {
@@ -38,12 +56,20 @@ public class Function {
         return null;
     }
 
+    public boolean hasVariable(String identifier) {
+        return variables.containsKey(identifier);
+    }
+
+    public boolean hasFunction(String identifier) {
+        return functions.containsKey(identifier);
+    }
+
     public void setVariable(String identifier, IVariable variable) {
-        if(variables.containsKey(identifier)) {
-            variables.put(identifier, variable);
-        } else {
-            //TODO: Throw error
-        }
+        variables.put(identifier, variable);
+    }
+
+    public void setFunction(String identifier, Function function) {
+        functions.put(identifier, function);
     }
 
 }

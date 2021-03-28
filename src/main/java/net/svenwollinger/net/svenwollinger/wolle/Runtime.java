@@ -29,19 +29,35 @@ public class Runtime {
     }
 
     public IVariable getVariable(String identifier) {
-        return variables.get(identifier);
+        if(variables.containsKey(identifier)) {
+            return variables.get(identifier);
+        }
+        //TODO: Throw error
+        return null;
     }
 
     public Function getFunction(String identifier) {
-        return functions.get(identifier);
+        if(functions.containsKey(identifier)) {
+            return functions.get(identifier);
+        }
+        //TODO: Throw error
+        return null;
+    }
+
+    public boolean hasVariable(String identifier) {
+        return variables.containsKey(identifier);
+    }
+
+    public boolean hasFunction(String identifier) {
+        return functions.containsKey(identifier);
     }
 
     public void setVariable(String identifier, IVariable variable) {
-        if(variables.containsKey(identifier)) {
-            variables.put(identifier, variable);
-        } else {
-            //TODO: Throw error
-        }
+        variables.put(identifier, variable);
+    }
+
+    public void setFunction(String identifier, Function function) {
+        functions.put(identifier, function);
     }
 
 }
