@@ -1,11 +1,15 @@
 package net.svenwollinger.net.svenwollinger.wolle.function;
 
+import net.svenwollinger.net.svenwollinger.wolle.Logging;
 import net.svenwollinger.net.svenwollinger.wolle.Runtime;
 import net.svenwollinger.net.svenwollinger.wolle.instruction.IInstruction;
 import net.svenwollinger.net.svenwollinger.wolle.variable.IVariable;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class Function {
     private HashMap<String, IVariable> variables = new HashMap<>();
@@ -27,6 +31,7 @@ public class Function {
     }
 
     public void execute() {
+        Logging.log("Executing function", this, Level.INFO);
         for(IInstruction instruction : instructions) {
             instruction.execute(this);
         }
@@ -70,6 +75,42 @@ public class Function {
 
     public void setFunction(String identifier, Function function) {
         functions.put(identifier, function);
+    }
+
+    public void addInstruction(IInstruction instruction) {
+        instructions.add(instruction);
+    }
+
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("type", "function");
+
+        JSONArray jsonVariables = new JSONArray();
+        for(String key : variables.keySet()) {
+            JSONObject jsonVariable = new JSONObject();
+            jsonVariable.put("identifier", key);
+            jsonVariable.put("value", variables.get(key).getValue().toString());
+            jsonVariables.put(jsonVariable);
+        }
+        json.put("variables", jsonVariables);
+
+        JSONArray jsonFunctions = new JSONArray();
+        for(String key : functions.keySet()) {
+            JSONObject jsonFunction = functions.get(key).toJSON();
+            jsonFunction.put("identifier", key);
+            jsonFunctions.put(jsonFunction);
+        }
+        json.put("functions", jsonFunctions);
+
+        JSONArray jsonInstructions = new JSONArray();
+        for(int i = 0; i < instructions.size(); i++) {
+            JSONObject jsonInstruction = new JSONObject();
+            jsonInstruction.put("identifier", instructions.get(i).toString());
+            jsonInstructions.put(jsonInstruction);
+        }
+        json.put("instructions", jsonInstructions);
+
+        return json;
     }
 
 }
