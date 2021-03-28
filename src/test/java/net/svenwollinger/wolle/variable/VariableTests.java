@@ -2,10 +2,11 @@ package net.svenwollinger.wolle.variable;
 
 import net.svenwollinger.net.svenwollinger.wolle.variable.VAR_Float;
 import net.svenwollinger.net.svenwollinger.wolle.variable.VAR_Int;
+import net.svenwollinger.net.svenwollinger.wolle.variable.VAR_String;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VariableTests {
 
@@ -55,5 +56,27 @@ public class VariableTests {
         var2.minusEquals(var1);
         assertEquals(-4.51F, var2.getValue());
         assertEquals(22.385F, var1.getValue());
+    }
+
+    @Test
+    public void VAR_String() {
+        final String value1 = "Sven";
+        final String value2 = "Wollinger";
+
+        VAR_String var1 = new VAR_String(value1);
+        VAR_String var2 = new VAR_String(value2);
+
+        assertEquals(value1, var1.getValue());
+        assertEquals(value2, var2.getValue());
+
+        assertEquals(value1 + value2, var1.plus(var2).getValue());
+        assertEquals(value2 + value1, var2.plus(var1).getValue());
+
+        var1.plusEquals(var2);
+        assertEquals(value1 + value2, var1.getValue());
+        var2.plusEquals(var1);
+        assertEquals(value2 + value1 + value2, var2.getValue());
+
+        //TODO: Implement & react on throws
     }
 }
